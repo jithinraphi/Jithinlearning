@@ -125,4 +125,45 @@ cat myfile.txt | grep [5-9]
 36)cut -c3-6 test.txt		//It will display the contents of 3-6 characters of each line present in test.txt
 cat test.txt | sort -n		//To display the content in the alphabetical order.
 cat test.txt | sort -n | uniq	//to remove the duplication of lines.
-
+37)
+a) /var - It is a system level directory.It contains lot of information about administration level 
+architecture.All logs will be present inside this folder./var/lib contains library files also.
+b) /sys - It contains all the system directories or file system.
+c) /proc - Everything in linux is a process.
+d) /dev - List of all devices that are present or can be connected to the system.
+/dev/null- Anything we send to it will disappear.
+38)
+a)lsmod - It will display all the modules that are currently installed on the system.
+b)lspci - It will give all the information about the pci devices.
+c)lsusb - It will give all the information about the usb devices.
+39)
+a)modprobe - It will display the modules that are available on the system.
+It is used in Ubuntu 12.04 or CentOS 6 or below versions.
+40)Hot and cold plug devices
+a)Cold plug devices - These are devices that can be connected/disconnected when the system is powered off
+Ex are CPU,memory,Non-USB storage devices.Each of these devices will be present as a file in the /dev 
+directory.Only kernel can talk to cold plug devices through a module/driver or built-in support.
+b)Hot plug devices - These are devices that can be connected/disconnected anytime that have either a built-in
+support or a loadable module avaiable for them.
+Ex: USB Harddrive,USB MemoryStack,Parallel or serial printers.
+41)File System Hierarchy
+/etc- host system specific configuration file
+/lib- central location for all the library files
+/opt - optional file 
+/proc -process directory
+/sbin - system binary files
+/usr - read only user data
+/var - variable files,which remain in its state even after booting
+42)Init and Telinit
+a)sudo telinit 1		//It will move to single user mode.It doesn't have any GUI and it have limited fn.
+b)telinit 5		//It will take you to the normal mode.
+c)init is the primary process that is the parent to all other processes. It starts at boot and checks
+out your /etc/inittab and a bunch of other settings.
+d)telinit is a smaller tool that informs init when it needs to switch runlevels. So you can use "telinit" 
+to "tell init" that it needs to switch runlevel.
+43)cp -a source destination 		//Here it will copy and archive to the destination.
+cp -u source destination	//Here it will only copy if there is some change in the
+destination or file is not present.
+mv -i file1 file2 		//It will give warning before overriding the contents of file1 to file2.
+44)gzip - It is used to compress the file.
+gunzip - It is used to decompress any files which has extension .gzip.
