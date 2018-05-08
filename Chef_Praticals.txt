@@ -1,4 +1,173 @@
 Chef Praticals
+
+
+
+chef-client --local-mode default.rb			//It will check the convergence.
+ruby -c default.rb && foodcritic default.rb 	//&& It will check the first arg,if success will check the second.
+chef-client default.rb						//It will run the file
+
+
+
+chef generate app first_cookbook			//Generating a cookbook
+
+1)Installing the apache package
+vim webserver.rb
+
+apt_update 'Update the apt cache daily' do
+  frequency 86_400
+  action :periodic
+end
+
+package 'apache2'
+
+sudo chef-client --local-mode webserver.rb
+
+2)Start and enable the Apache service
+Modify webserver.rb
+
+apt_update 'Update the apt cache daily' do
+  frequency 86_400
+  action :periodic
+end
+
+package 'apache2'
+
+service 'apache2' do
+  supports status: true
+  action [:enable, :start]
+end
+
+3)Add a homepage
+apt_update 'Update the apt cache daily' do
+  frequency 86_400
+  action :periodic
+end
+
+package 'apache2'
+
+service 'apache2' do
+  supports status: true
+  action [:enable, :start]
+end
+
+file '/var/www/html/index.html' do
+  content '<html>
+  <body>
+    <h1>hello world</h1>
+  </body>
+</html>'
+end
+
+
+4)Creating a Cookbook
+a)chef generate cookbook cookbooks/learn_chef_apache2	//It will create a cookbook names learn_chef_apache2
+b)chef generate template cookbooks/learn_chef_apache2 index.html	\\Run this command if we are running
+from the Chef_Repo folder.
+cookbooks
+└── learn_chef_apache2
+├── templates
+    │   └── index.html.erb
+The .erb extension simply means that the file can have placeholders
+c)Now copy the contents of the HTML file from your recipe to the new HTML file, index.html.erb.
+<html>
+  <body>
+    <h1>hello world</h1>
+  </body>
+</html>
+
+d)Update the recipe to reference the HTML template
+Write out the recipe, default.rb, like this.
+
+e)Run the cookbook
+Now run the cookbook. To do so, we use the chef-client command and specify what's called the run-list.
+
+sudo chef-client --local-mode --runlist 'recipe[learn_chef_apache2]'
+A run-list specifies each of the individual recipes from your cookbook that you want to apply. 
+
+f)What does a cookbook do?
+It includes recipes and external information and makes them easier to manage.
+What is a run-list?
+A run-list specifies which recipes to run and the order in which to run them.
+What does test and repair mean?
+Chef applies changes only when they are necessary.
+
+-------------------------------------------------------------------------------------------
+5)Workstation
+Workstation can be any machine - Windows,Linux or mac 
+We need to install Chef DK on it
+The knife command enables you to communicate with the Chef server from your workstation.
+a)configure your workstation
+knife is the command-line tool that provides an interface between your workstation and the Chef server. knife 
+enables you to upload your cookbooks to the Chef server and work with nodes, the servers that you manage.
+
+knife requires two files to authenticate with the Chef server.
+
+a1)an RSA private key
+Every request to the Chef server is authenticated through an RSA public key pair. The Chef server holds the 
+public part; you hold the private part.
+
+a2)a knife configuration file
+The configuration file is typically named knife.rb. It contains information such as the Chef server's URL, the location
+of your RSA private key, and the default location of your cookbooks.
+
+Both of these files are typically located in a directory named .chef. By default, every time knife runs, it looks
+in the current working directory for the .chef directory. If the .chef directory does not exist, knife 
+searches up the directory tree for a .chef directory. This process is similar to how tools such as Git work.
+
+a1)Generate your knife configuration file
+Here's how to create your knife configuration file. Your file will be located at ~/learn-chef/.chef/knife.rb.
+
+Sign in to https://manage.chef.io/login.
+From the Administration tab, select your organization.
+From the menu on the left, select Generate Knife Config and save the file.
+cp ~/Downloads/knife.rb ~/learn-chef/.chef
+
+a2)Generate your RSA private key
+Here's how to create your RSA private key. Your file will be located at ~/learn-chef/.chef/<username>.pem, where <username> is the name you chose when you created your hosted Chef account.
+
+Sign in to https://manage.chef.io/.
+From the Administration tab, select Users from the menu on the left.
+Select your user name, select Reset key from the menu on the left.
+cp ~/Downloads/username.pem ~/learn-chef/.chef
+
+knife ssl check		//to validate your connection to the Chef server.
+
+---------------------------------------------------------------------------------
+6)Upload a cookbook to Chef server
+upload the learn_chef_apache2 cookbook to your Chef server. Run this command from anywhere under your
+~/learn-chef directory.
+
+knife cookbook upload learn_chef_apache2
+
+a)Which command lists which cookbooks are on the Chef server?
+knife cookbook list
+------------------------------------------------------------------------------------
+7)Bootstrap your node
+Set up chef-client on your node, associate it with your Chef server, and apply your Apache cookbook to it.
+7a)Bootstrap using password authentication
+Replace ADDRESS with your remote node's external address, USER with your username, and PASSWORD 
+with your user's password.
+knife bootstrap ADDRESS --ssh-user USER --ssh-password 'PASSWORD' --sudo --use-sudo-password
+ --node-name node1-ubuntu --run-list 'recipe[learn_chef_apache2]'
+ 
+ Run the above command from the machine where cookbook called learn_chef_apache2 is present
+ 
+ knife bootstrap 54.254.151.91 --ssh-user user --ssh-password 'cybage@123'
+ --sudo --use-sudo-password --node-name node1-ubuntu --run-list 'recipe[learn_chef_apache2]'
+
+7b)Confirm the result
+ 
+knife node list
+node1-ubuntu
+knife node show node1-ubuntu
+
+curl <ip address of the node>
+<html>
+  <body>
+    <h1>hello world</h1>
+  </body>
+</html>
+----------------------------------------------------------------------------------------------------------
 1)Update your node configuration
 a)You ran knife bootstrap to associate your node with the Chef server and do an initial check-in.
 Bootstrapping is a one-time process.
@@ -142,20 +311,3 @@ sudo apt install virtualbox
 
 kitchen create 		//For creating the test kitchen.
 kitchen destroy 	//If you need to destroy your instance before you complete this module
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
