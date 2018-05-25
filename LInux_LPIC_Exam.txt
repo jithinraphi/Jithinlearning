@@ -51,7 +51,7 @@ t):!ls /home/user - To display the contents of /home/user in VI mode.
 26)wc - For checking the number of lines,word count and size of the file 
 wc -l - It will only display the number of lines.
 27)split -l 3 file - It will the split the content of the 'file' into different files,where each file
-contains 2 lines of code.
+contains 3 lines of code.
 28)
 a)at * > myfile.txt  //It will display the contents of all files and copy to a new file named myfile.txt.
 If we use >,it will override the content to that particular file.
@@ -166,4 +166,104 @@ cp -u source destination	//Here it will only copy if there is some change in the
 destination or file is not present.
 mv -i file1 file2 		//It will give warning before overriding the contents of file1 to file2.
 44)gzip - It is used to compress the file.
-gunzip - It is used to decompress any files which has extension .gzip.
+gunzip - It is used to decompress any files which has extension .gz
+45)Links are of two types 
+Softlinks and hardlinks
+(i)Hardlinks - It cannot be used across file system.
+Hardlinks are created using ln command.
+It refer the core file in the system.It will refer the real files.
+If you want to delete the file,we have the delete both the locations.
+In hardlinks,if you update one location it will automatically updated in the other location also.
+Hardlink will create actual file entry in the file system.
+Syntax:
+ln [option] <source> <link_name>
+ln /etc/hosts host_link_file
+If you change in one file,it will automatically gets reflected on the other file too.
+ln -i /var/www/html host_link_file		//In order to change the location of the link(it will ask to replace)
+ln -f /etc/hosts softlink_test			//In order to change the location of the link(it won't ask to replace)
+
+(ii)Softlinks - These are referred to a symbolic links.Softlinks are the shortcuts to the location.
+It can be used across file system.
+Contents of the symbolic links points to the linked file that is referred.
+Softlinks are just reference or alias to the another location.
+ln -s <source> <link_name>
+ln -s /etc/hosts softlink_test
+ln -is /var/www/html softlink_test		//In order to change the location of the link(it will ask to replace)
+ln -fs /etc/hosts softlink_test			//In order to change the location of the link(it won't ask to replace)
+46)
+(i)newgrp <groupname>
+Once it is set,if you create a new file,that file will be added to this group.
+(ii)umask - When a user create a file/folder,it has some basic configuration by default.
+umask 300 it will reduce the current permission with 300
+umask 000 to reset the permission to the default
+47)find,locate,whereis and which
+a)find - It will only search files and directories where we do have permission to see.
+find / -name *.txt			//It will search for all files that ends with .txt
+find /etc/ -perm 777		//To check files that have 777 permissions in the /etc file
+find /etc/ -size 1M			//To check the files that has size above 1M in the /etc file
+48)
+dd if=/dev/xdev1 of=mbr.bak bs=512 count=1	//It will copy the first 512 bytes contents of /dev/xdev1 to mbr.bak
+49)Exercise: Exercise: The GUNZIP Command
+(i)Using the appropriate 'gzip' command and options, create a compressed file called 'myetc.gz' from the files 
+copied in Step #1. Show the newly created file and it's attributes.
+gzip -c * > myetc.gz
+(ii)gzip -l myetc.gz		//To check the compression ratio of the file myetc.gz
+50)top
+It displays the linux running processes and tasks.
+It will update every 3 seconds.
+51)nice and renice 
+(i)-20 is the highest priority and 19 is the lowest priority
+nice - allow you to launch a program with specified priority
+Default priority of nice when not given is 10.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
